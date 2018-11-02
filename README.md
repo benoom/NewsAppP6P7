@@ -5,8 +5,8 @@ App for pulling soccer news stories from the Guardian utilzing the Guardian API 
 ## Installation
 
 ### Requirements
-* Android SDK v
-* Android Support Repository v
+* Android SDK v28
+* Android Support Repository v7:28.0.0
 
 ## Getting Started
 This project uses the Gradle build system. To build this project, use the "gradlew build" command or use "Import Project" in Android Studio.
