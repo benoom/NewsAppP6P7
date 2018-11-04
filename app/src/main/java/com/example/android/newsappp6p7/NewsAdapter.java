@@ -3,6 +3,7 @@ package com.example.android.newsappp6p7;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * An {@link NewsAdapter} knows how to create a list item layout for each news article
@@ -23,6 +26,10 @@ import java.util.List;
  */
 public class NewsAdapter extends ArrayAdapter<News> {
 
+    /**
+     * Tag for the log messages
+     */
+    private static final String LOG_TAG = NewsAdapter.class.getSimpleName();
     /**
      * Constructs a new {@link NewsAdapter}.
      *
@@ -55,20 +62,20 @@ public class NewsAdapter extends ArrayAdapter<News> {
         // Display the current news article in that TextView
         titleView.setText(currentNews.getArticleTitle());
 
-        // Create a new Date object from the time in milliseconds of the news article
-        Date dateObject = new Date(currentNews.getTimePublished());
+        // Create a new Date object from the time of the news article
+        String dateString = new String(currentNews.getTimePublished());
 
         // Find the TextView with view ID date
         TextView dateView = listItemView.findViewById(R.id.date);
         // Format the date string (i.e. "Mar 3, 1984")
-        String formattedDate = formatDate(dateObject);
+        String formattedDate = formatDate(dateString);
         // Display the date of the current news article in that TextView
         dateView.setText(formattedDate);
 
         // Find the TextView with view ID time
         TextView timeView = (TextView) listItemView.findViewById(R.id.time);
         // Format the time string (i.e. "4:30PM")
-        String formattedTime = formatTime(dateObject);
+        String formattedTime = formatTime(dateString);
         // Display the time of the current news article in that TextView
         timeView.setText(formattedTime);
 
@@ -78,18 +85,40 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
 
     /**
-     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
+     * Return the formatted date string (i.e. "Mar 3, 1984")
      */
-    private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
-        return dateFormat.format(dateObject);
+    private String formatDate(String input) {
+        SimpleDateFormat formatInput =
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        SimpleDateFormat formatOutput =
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String output = null;
+        try {
+            Date dt = formatInput.parse(input);
+            output = formatOutput.format(dt);
+        } catch (ParseException e) {
+            Log.e(LOG_TAG, "Error during formatting date", e);
+        }
+
+        return output;
     }
 
     /**
-     * Return the formatted time string (i.e. "4:30 PM") from a Date object.
+     * Return the formatted date string (i.e. "Mar 3, 1984")
      */
-    private String formatTime(Date dateObject) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-        return timeFormat.format(dateObject);
+    private String formatTime(String input) {
+        SimpleDateFormat formatInput =
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        SimpleDateFormat formatOutput =
+                new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String output = null;
+        try {
+            Date dt = formatInput.parse(input);
+            output = formatOutput.format(dt);
+        } catch (ParseException e) {
+            Log.e(LOG_TAG, "Error during formatting time", e);
+        }
+
+        return output;
     }
 }
