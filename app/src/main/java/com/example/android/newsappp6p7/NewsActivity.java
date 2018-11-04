@@ -30,7 +30,7 @@ public class NewsActivity extends AppCompatActivity
 
     /** URL for news article data from the Guardian */
     private static final String GUARDIAN_REQUEST_URL =
-            "https://content.guardianapis.com/search?&show-tags=contributor&api-key=test";
+            "https://content.guardianapis.com/search?";
 
     /**
      * Constant value for the News loader ID.
@@ -129,14 +129,18 @@ public class NewsActivity extends AppCompatActivity
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // Append query parameter and its value.
+        uriBuilder.appendQueryParameter("page-size", "10");
         uriBuilder.appendQueryParameter("q", "soccer");
-        uriBuilder.appendQueryParameter("tag", sectionId + "/" + sectionId);
+        uriBuilder.appendQueryParameter("section", sectionId);
         uriBuilder.appendQueryParameter("orderby", orderBy);
+        uriBuilder.appendQueryParameter("api-key", "d3e7f5c5-e183-40d0-9e5e-66f9329f5ebc");
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
 
         Log.i(LOG_TAG, "URL: " + uriBuilder.toString());
 
-        // Return the completed uri `https://content.guardianapis.com/search?&show-tags=contributor
-        // &api-key=test&q=soccer&tag=football/football'
+        // Return the completed uri `https://content.guardianapis.com/search?
+        // page-size=10&q=soccer&section=football&orderby=relevance&show-tags=contributor&
+        // api-key=test'
         return new NewsLoader(this, uriBuilder.toString());
     }
 
