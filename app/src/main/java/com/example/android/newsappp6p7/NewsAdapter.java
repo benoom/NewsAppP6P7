@@ -57,9 +57,19 @@ public class NewsAdapter extends ArrayAdapter<News> {
         // Find the news article at the given position in the list of news articles
         News currentNews = getItem(position);
 
+        // Find the TextView with the view ID section_id
+        TextView sectionView = listItemView.findViewById(R.id.section_id);
+        // Display the current news article section in that TextView
+        sectionView.setText(currentNews.getNameofSection());
+
+        // Find the TextView with the view ID section_id
+        TextView contributorView = listItemView.findViewById(R.id.contributor);
+        // Display the current news article section in that TextView
+        contributorView.setText(currentNews.getContributor());
+
         // Find the TextView with view ID article_title
         TextView titleView = listItemView.findViewById(R.id.article_title);
-        // Display the current news article in that TextView
+        // Display the current news article title in that TextView
         titleView.setText(currentNews.getArticleTitle());
 
         // Create a new Date object from the time of the news article
@@ -91,7 +101,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
         SimpleDateFormat formatInput =
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         SimpleDateFormat formatOutput =
-                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
         String output = null;
         try {
             Date dt = formatInput.parse(input);
