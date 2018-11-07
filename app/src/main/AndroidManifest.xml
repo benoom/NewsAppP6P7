@@ -24,7 +24,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.newsappp6p7.SettingsActivity"/>
+                android:value="com.example.android.newsappp6p7.NewsActivity" />
         </activity>
     </application>
 
