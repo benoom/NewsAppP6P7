@@ -12,7 +12,7 @@ public class News {
     private String mNameofSection;
 
     /** Time of the article */
-    private String mTimeInMilliseconds;
+    private String mPublicationDate;
 
     /** Website URL of the news article */
     private String mUrl;
@@ -34,7 +34,7 @@ public class News {
                 String contributor) {
         mArticleTitle = articleTitle;
         mNameofSection = nameOfSection;
-        mTimeInMilliseconds = timePublished;
+        mPublicationDate = timePublished;
         mUrl = url;
         mContributor = contributor;
     }
@@ -57,7 +57,7 @@ public class News {
      * Returns the publishing date of the article.
      */
     public String getTimePublished() {
-        return mTimeInMilliseconds;
+        return mPublicationDate;
     }
 
     /**

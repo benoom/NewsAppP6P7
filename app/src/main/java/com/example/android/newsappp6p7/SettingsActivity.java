@@ -16,15 +16,16 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
     }
 
-    public static class NewsPreferencesFragment extends PreferenceFragment implements
+    public static class NewsPreferencesFragment extends
+            PreferenceFragment implements
             Preference.OnPreferenceChangeListener{
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.layout.settings_main);
+            addPreferencesFromResource(R.xml.settings_main);
 
-            Preference sectionId = findPreference(getString(R.string.settings_section_id_key));
-            bindPreferenceSummaryToValue(sectionId);
+            Preference pageSize = findPreference(getString(R.string.settings_page_size_key));
+            bindPreferenceSummaryToValue(pageSize);
 
             Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
             bindPreferenceSummaryToValue(orderBy);

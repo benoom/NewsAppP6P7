@@ -1,8 +1,6 @@
 package com.example.android.newsappp6p7;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -83,7 +80,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
         dateView.setText(formattedDate);
 
         // Find the TextView with view ID time
-        TextView timeView = (TextView) listItemView.findViewById(R.id.time);
+        TextView timeView = listItemView.findViewById(R.id.time);
         // Format the time string (i.e. "4:30PM")
         String formattedTime = formatTime(dateString);
         // Display the time of the current news article in that TextView

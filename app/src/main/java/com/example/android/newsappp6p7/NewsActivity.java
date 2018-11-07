@@ -1,7 +1,6 @@
 package com.example.android.newsappp6p7;
 
 import android.app.LoaderManager;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsActivity extends AppCompatActivity
-        implements LoaderCallbacks<List<News>> {
+        implements LoaderManager.LoaderCallbacks<List<News>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = NewsActivity.class.getName();
 
@@ -37,6 +36,10 @@ public class NewsActivity extends AppCompatActivity
      */
     private static final int NEWS_LOADER_ID = 1;
 
+    public LoaderManager loaderManager = getLoaderManager();
+
+    SharedPreferences sharedPrefs;
+
     /** Adapter for the list of news articles */
     private NewsAdapter mAdapter;
 
@@ -47,6 +50,8 @@ public class NewsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_activity);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Find a reference to the {@link ListView} in the layout
         ListView newsListView = findViewById(R.id.list);
@@ -64,6 +69,7 @@ public class NewsActivity extends AppCompatActivity
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected news article.
         newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // Find the current news article that was clicked on
@@ -114,9 +120,9 @@ public class NewsActivity extends AppCompatActivity
 
         // getString retrieves a String value from the preferences. The second parameter is the
         // default value for this preference.
-        String sectionId = sharedPrefs.getString(
-                getString(R.string.settings_section_id_key),
-                getString(R.string.settings_section_id_default));
+        String pageSize = sharedPrefs.getString(
+                getString(R.string.settings_page_size_key),
+                getString(R.string.settings_page_size_default));
 
         String orderBy = sharedPrefs.getString(
                 getString(R.string.settings_order_by_key),
@@ -129,18 +135,16 @@ public class NewsActivity extends AppCompatActivity
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // Append query parameter and its value.
-        uriBuilder.appendQueryParameter("page-size", "10");
+        uriBuilder.appendQueryParameter("page-size", pageSize);
         uriBuilder.appendQueryParameter("q", "soccer");
-        uriBuilder.appendQueryParameter("section", sectionId);
-        uriBuilder.appendQueryParameter("orderby", orderBy);
+        uriBuilder.appendQueryParameter("section", "football");
+        uriBuilder.appendQueryParameter("order-by", orderBy);
         uriBuilder.appendQueryParameter("api-key", "d3e7f5c5-e183-40d0-9e5e-66f9329f5ebc");
         uriBuilder.appendQueryParameter("show-tags", "contributor");
 
         Log.i(LOG_TAG, "URL: " + uriBuilder.toString());
 
-        // Return the completed uri `https://content.guardianapis.com/search?
-        // page-size=10&q=soccer&section=football&orderby=relevance&show-tags=contributor&
-        // api-key=test'
+        // Return the completed uri
         return new NewsLoader(this, uriBuilder.toString());
     }
 
@@ -186,5 +190,22 @@ public class NewsActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPrefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedPrefs.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        loaderManager.restartLoader(NEWS_LOADER_ID, null, this);
     }
 }
