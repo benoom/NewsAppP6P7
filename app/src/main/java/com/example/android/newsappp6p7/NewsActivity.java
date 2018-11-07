@@ -193,13 +193,13 @@ public class NewsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         sharedPrefs.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         sharedPrefs.unregisterOnSharedPreferenceChangeListener(this);
     }
